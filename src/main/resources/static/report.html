@@ -533,7 +533,7 @@
 </footer>
 
 <script>
-    const baseUrl = "http://localhost:8080";
+   // const baseUrl = "http://localhost:8080";
 
     function currentUsername() {
         return localStorage.getItem("username");
@@ -542,7 +542,7 @@
     function authUrl(path, params) {
         const query = new URLSearchParams(params || {});
         query.set("username", currentUsername());
-        return baseUrl + path + "?" + query.toString();
+        return  path + "?" + query.toString();
     }
 
     function checkLogin() {
