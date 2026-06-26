@@ -191,7 +191,7 @@
 </div>
 
 <script>
-    const baseUrl = "http://localhost:8080";
+    //const baseUrl = "http://localhost:8080";
 
     function showMessage(text, type) {
         const message = document.getElementById("message");
@@ -218,7 +218,7 @@
             return;
         }
 
-        fetch(baseUrl + "/user/register", {
+        fetch("/user/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
