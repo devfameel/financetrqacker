@@ -512,14 +512,14 @@
 </footer>
 
 <script>
-    const baseUrl = "http://localhost:8080";
+   // const baseUrl = "http://localhost:8080";
 
     function currentUsername() {
         return localStorage.getItem("username");
     }
 
     function authUrl(path) {
-        return baseUrl + path + "?username=" + encodeURIComponent(currentUsername());
+        return  path + "?username=" + encodeURIComponent(currentUsername());
     }
 
     function checkLogin() {
