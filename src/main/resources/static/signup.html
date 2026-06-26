@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up - Personal Finance Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                linear-gradient(135deg, rgba(14, 87, 68, 0.9), rgba(43, 66, 112, 0.88)),
+                url("https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1400&q=80");
+            background-size: cover;
+            background-position: center;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: #0f172a;
+        }
+
+        .subtitle {
+            margin: 0 0 26px;
+            text-align: center;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #0f766e;
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.14);
+        }
+
+        .password-wrap input {
+            padding-right: 50px;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            width: 36px;
+            height: 36px;
+            min-height: 36px;
+            padding: 0;
+            margin: 0;
+            transform: translateY(-50%);
+            background: transparent;
+            color: #475569;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        .eye-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        button {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px;
+            background: #0f766e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #115e59;
+            transform: translateY(-1px);
+        }
+
+        .message {
+            text-align: center;
+            min-height: 22px;
+            margin-top: 16px;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: #047857;
+        }
+
+        .message.error {
+            color: #b91c1c;
+        }
+
+        .switch-page {
+            text-align: center;
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .switch-page a {
+            color: #0f766e;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .switch-page a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Create account</h2>
+    <p class="subtitle">Sign up once, then login to manage your finance tracker.</p>
+
+    <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Choose username" autocomplete="username">
+    </div>
+
+    <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter email" autocomplete="email">
+    </div>
+
+    <div class="field">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+            <input type="password" id="password" placeholder="Create password" autocomplete="new-password">
+            <button class="eye-btn" type="button" onclick="togglePassword()" title="Show password">&#128065;</button>
+        </div>
+    </div>
+
+    <button onclick="signupUser()">Sign up</button>
+
+    <div class="message" id="message"></div>
+
+    <div class="switch-page">
+        Already have an account? <a href="index.html">Login</a>
+    </div>
+</div>
+
+<script>
+    const baseUrl = "http://localhost:8080";
+
+    function showMessage(text, type) {
+        const message = document.getElementById("message");
+        message.innerText = text;
+        message.className = "message " + type;
+    }
+
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const eyeButton = document.querySelector(".eye-btn");
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        eyeButton.innerHTML = isHidden ? "&#128064;" : "&#128065;";
+        eyeButton.title = isHidden ? "Hide password" : "Show password";
+    }
+
+    function signupUser() {
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        if (!username || !email || !password) {
+            showMessage("Username, email and password are required", "error");
+            return;
+        }
+
+        fetch(baseUrl + "/user/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            })
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data === "User registered successfully") {
+                showMessage("Signup successful. Redirecting to login...", "success");
+                setTimeout(function() {
+                    window.location.href = "index.html";
+                }, 900);
+            } else {
+                showMessage(data, "error");
+            }
+        })
+        .catch(error => {
+            showMessage("Error connecting to backend", "error");
+        });
+    }
+</script>
+
+</body>
+</html>

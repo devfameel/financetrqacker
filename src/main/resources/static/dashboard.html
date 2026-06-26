@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Personal Finance Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #eef4f3;
+            color: #172033;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            background: #ffffff;
+            border-bottom: 1px solid #dbe6e4;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 22px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 220px;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: #0f766e;
+            color: #ffffff;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .brand-title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 19px;
+            line-height: 1.15;
+        }
+
+        .brand-subtitle {
+            margin: 3px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #d9efeb;
+            color: #0f766e;
+            transform: translateY(-1px);
+        }
+
+        .nav a.logout {
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        .nav a.logout:hover {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .container {
+            width: min(1180px, calc(100% - 32px));
+            margin: 32px auto 42px;
+        }
+
+        .hero {
+            background:
+                linear-gradient(135deg, rgba(15, 118, 110, 0.94), rgba(35, 61, 97, 0.9)),
+                url("https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1400&q=80");
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            padding: 34px;
+            color: #ffffff;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 210px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            max-width: 650px;
+            font-size: 34px;
+            line-height: 1.15;
+            letter-spacing: 0;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 620px;
+            color: #dbeafe;
+            line-height: 1.5;
+        }
+
+        .hero-action {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #0f766e;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.2);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin: 24px 0;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 22px;
+            border: 1px solid #dbe6e4;
+            border-radius: 8px;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.07);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card h3 {
+            margin: 0;
+            color: #475569;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            background: #d9efeb;
+            color: #0f766e;
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .card p {
+            margin: 0;
+            color: #0f172a;
+            font-size: 34px;
+            line-height: 1;
+            font-weight: bold;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(290px, 0.85fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            background: #ffffff;
+            border: 1px solid #dbe6e4;
+            border-radius: 8px;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.07);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e2ecea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 19px;
+        }
+
+        .panel-header span {
+            color: #64748b;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px 22px;
+            border-bottom: 1px solid #edf2f1;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        th {
+            background: #f8fbfb;
+            color: #475569;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        td:last-child,
+        th:last-child {
+            text-align: right;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfb;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #64748b;
+        }
+
+        .quick-links {
+            padding: 20px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .quick-link {
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 16px;
+            border: 1px solid #e2ecea;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #0f172a;
+            font-weight: bold;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+        }
+
+        .quick-link:hover {
+            background: #f8fbfb;
+            border-color: #9fd5ca;
+            transform: translateY(-1px);
+        }
+
+        .quick-link span {
+            color: #0f766e;
+            font-size: 18px;
+        }
+
+        .status-message {
+            margin-top: 16px;
+            color: #b91c1c;
+            font-weight: bold;
+            min-height: 22px;
+        }
+
+        .site-footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+
+        .footer-inner strong {
+            color: #ffffff;
+        }
+
+        @media (max-width: 820px) {
+            .header-inner,
+            .hero,
+            .footer-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav {
+                justify-content: flex-start;
+            }
+
+            .hero {
+                padding: 28px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .cards,
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .container,
+            .header-inner,
+            .footer-inner {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .nav a {
+                flex: 1 1 calc(50% - 8px);
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 22px;
+                min-height: 190px;
+            }
+
+            .card p {
+                font-size: 30px;
+            }
+
+            th,
+            td {
+                padding: 13px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <div class="brand-mark">Rs</div>
+            <div>
+                <h2 class="brand-title">Finance Tracker</h2>
+                <p class="brand-subtitle">Dashboard overview</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a class="active" href="dashboard.html">Dashboard</a>
+            <a href="category.html">Category</a>
+            <a href="expense.html">Expense</a>
+            <a href="report.html">Report</a>
+            <a class="logout" href="#" onclick="logoutUser()">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <section class="hero">
+            <div>
+                <h1 id="welcomeTitle">Your money snapshot, all in one place</h1>
+                <p>Track categories, review spending, and jump straight into the actions that keep your budget current.</p>
+            </div>
+            <a class="hero-action" href="expense.html">Add Expense</a>
+        </section>
+
+        <section class="cards">
+            <div class="card">
+                <div class="card-top">
+                    <h3>Total Categories</h3>
+                    <div class="card-icon">C</div>
+                </div>
+                <p id="totalCategories">0</p>
+            </div>
+
+            <div class="card">
+                <div class="card-top">
+                    <h3>Total Expenses</h3>
+                    <div class="card-icon">E</div>
+                </div>
+                <p id="totalExpenses">0</p>
+            </div>
+
+            <div class="card">
+                <div class="card-top">
+                    <h3>Total Amount</h3>
+                    <div class="card-icon">Rs</div>
+                </div>
+                <p id="totalExpenseAmount">Rs 0</p>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>Category Wise Total</h3>
+                    <span id="categoryCount">0 categories</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTable">
+                            <tr>
+                                <td class="empty-row" colspan="2">Loading dashboard data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <aside class="panel">
+                <div class="panel-header">
+                    <h3>Quick Actions</h3>
+                </div>
+                <div class="quick-links">
+                    <a class="quick-link" href="expense.html">Record new expense <span>+</span></a>
+                    <a class="quick-link" href="category.html">Manage categories <span>&gt;</span></a>
+                    <a class="quick-link" href="report.html">View reports <span>&gt;</span></a>
+                </div>
+            </aside>
+        </section>
+
+        <div class="status-message" id="statusMessage"></div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div><strong>Personal Finance Tracker</strong> keeps your spending organized.</div>
+        <div id="footerUser">Ready for your next update.</div>
+    </div>
+</footer>
+
+<script>
+    const baseUrl = "http://localhost:8080";
+
+    function currentUsername() {
+        return localStorage.getItem("username");
+    }
+
+    function authUrl(path) {
+        return baseUrl + path + "?username=" + encodeURIComponent(currentUsername());
+    }
+
+    function checkLogin() {
+        const username = currentUsername();
+
+        if (!username) {
+            window.location.href = "index.html";
+        }
+    }
+
+    function logoutUser() {
+        localStorage.removeItem("username");
+        window.location.href = "index.html";
+    }
+
+    function formatAmount(amount) {
+        return new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 2
+        }).format(Number(amount || 0));
+    }
+
+    function setUserGreeting() {
+        const username = currentUsername();
+
+        if (username) {
+            document.getElementById("welcomeTitle").innerText = "Welcome back, " + username;
+            document.getElementById("footerUser").innerText = "Logged in as " + username;
+        }
+    }
+
+    function loadDashboard() {
+        fetch(authUrl("/dashboard"))
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("totalCategories").innerText = data.totalCategories || 0;
+            document.getElementById("totalExpenses").innerText = data.totalExpenses || 0;
+            document.getElementById("totalExpenseAmount").innerText = formatAmount(data.totalExpenseAmount);
+
+            const table = document.getElementById("categoryTable");
+            const totals = data.categoryWiseTotal || {};
+            const categories = Object.keys(totals);
+            table.innerHTML = "";
+            document.getElementById("categoryCount").innerText = categories.length + (categories.length === 1 ? " category" : " categories");
+
+            if (categories.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td class="empty-row" colspan="2">No category spending found yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            categories.forEach(category => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${category}</td>
+                        <td>${formatAmount(totals[category])}</td>
+                    </tr>
+                `;
+            });
+        })
+        .catch(error => {
+            document.getElementById("statusMessage").innerText = "Error loading dashboard";
+            document.getElementById("categoryTable").innerHTML = `
+                <tr>
+                    <td class="empty-row" colspan="2">Dashboard data could not be loaded.</td>
+                </tr>
+            `;
+        });
+    }
+
+    checkLogin();
+    setUserGreeting();
+    loadDashboard();
+</script>
+
+</body>
+</html>

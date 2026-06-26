@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category - Personal Finance Tracker</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #eef4f3;
+            color: #172033;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            background: #ffffff;
+            border-bottom: 1px solid #dbe6e4;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner,
+        .container,
+        .footer-inner {
+            width: min(1180px, calc(100% - 32px));
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .header-inner {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 22px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 220px;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: #0f766e;
+            color: #ffffff;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .brand-title {
+            margin: 0;
+            color: #0f172a;
+            font-size: 19px;
+            line-height: 1.15;
+        }
+
+        .brand-subtitle {
+            margin: 3px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: #d9efeb;
+            color: #0f766e;
+            transform: translateY(-1px);
+        }
+
+        .nav a.logout {
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        main { flex: 1; }
+
+        .container {
+            margin-top: 32px;
+            margin-bottom: 42px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0f766e, #263d61);
+            border-radius: 8px;
+            padding: 30px;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            min-height: 170px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+            line-height: 1.15;
+            letter-spacing: 0;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 620px;
+            color: #dbeafe;
+            line-height: 1.5;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(300px, 0.85fr) minmax(0, 1.35fr);
+            gap: 22px;
+            align-items: start;
+            margin-top: 24px;
+        }
+
+        .panel {
+            background: #ffffff;
+            border: 1px solid #dbe6e4;
+            border-radius: 8px;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.07);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e2ecea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 19px;
+        }
+
+        .form-body {
+            padding: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: #0f766e;
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.14);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            min-height: 42px;
+            padding: 10px 15px;
+            background: #0f766e;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #115e59;
+            transform: translateY(-1px);
+        }
+
+        .secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .danger {
+            background: #b91c1c;
+        }
+
+        .danger:hover {
+            background: #991b1b;
+        }
+
+        .message {
+            margin-top: 14px;
+            min-height: 22px;
+            font-weight: bold;
+            color: #0f766e;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px 22px;
+            border-bottom: 1px solid #edf2f1;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        th {
+            background: #f8fbfb;
+            color: #475569;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        tbody tr:hover {
+            background: #f8fbfb;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #64748b;
+        }
+
+        .site-footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+
+        .footer-inner strong { color: #ffffff; }
+
+        @media (max-width: 820px) {
+            .header-inner,
+            .hero,
+            .footer-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav {
+                justify-content: flex-start;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .header-inner,
+            .container,
+            .footer-inner {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .nav a {
+                flex: 1 1 calc(50% - 8px);
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 22px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            th,
+            td {
+                padding: 13px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <div class="brand">
+            <div class="brand-mark">CAT</div>
+            <div>
+                <h2 class="brand-title">Finance Tracker</h2>
+                <p class="brand-subtitle">Category management</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a class="active" href="category.html">Category</a>
+            <a href="expense.html">Expense</a>
+            <a href="report.html">Report</a>
+            <a class="logout" href="#" onclick="logoutUser()">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <section class="hero">
+            <div>
+                <h1>Organize your spending categories</h1>
+                <p>Create clear category names so every expense lands in the right place and reports stay useful.</p>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>Add / Update Category</h3>
+                </div>
+                <div class="form-body">
+                    <input type="hidden" id="categoryId">
+
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" id="categoryName" placeholder="Enter category name">
+
+                    <div class="actions">
+                        <button onclick="saveCategory()">Save Category</button>
+                        <button class="secondary" onclick="clearForm()">Clear</button>
+                    </div>
+
+                    <div class="message" id="message"></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>Category List</h3>
+                    <span id="categoryCount">0 categories</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Category Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTable">
+                            <tr>
+                                <td class="empty-row" colspan="3">Loading categories...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div><strong>Personal Finance Tracker</strong> category workspace.</div>
+        <div id="footerUser">Keep your budget labels tidy.</div>
+    </div>
+</footer>
+
+<script>
+    const baseUrl = "http://localhost:8080";
+
+    function currentUsername() {
+        return localStorage.getItem("username");
+    }
+
+    function authUrl(path) {
+        return baseUrl + path + "?username=" + encodeURIComponent(currentUsername());
+    }
+
+    function checkLogin() {
+        const username = currentUsername();
+
+        if (!username) {
+            window.location.href = "index.html";
+        }
+    }
+
+    function logoutUser() {
+        localStorage.removeItem("username");
+        window.location.href = "index.html";
+    }
+
+    function setUserFooter() {
+        const username = currentUsername();
+
+        if (username) {
+            document.getElementById("footerUser").innerText = "Logged in as " + username;
+        }
+    }
+
+    function showMessage(text, isError) {
+        const message = document.getElementById("message");
+        message.innerText = text;
+        message.style.color = isError ? "#b91c1c" : "#0f766e";
+    }
+
+    function loadCategories() {
+        fetch(authUrl("/category"))
+        .then(response => response.json())
+        .then(data => {
+            const table = document.getElementById("categoryTable");
+            table.innerHTML = "";
+            document.getElementById("categoryCount").innerText = data.length + (data.length === 1 ? " category" : " categories");
+
+            if (data.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td class="empty-row" colspan="3">No categories added yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            data.forEach(category => {
+                table.innerHTML += `
+                    <tr>
+                        <td>${category.id}</td>
+                        <td>${category.name}</td>
+                        <td>
+                            <div class="row-actions">
+                                <button onclick="editCategory(${category.id}, '${category.name}')">Edit</button>
+                                <button class="danger" onclick="deleteCategory(${category.id})">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        })
+        .catch(error => {
+            document.getElementById("categoryTable").innerHTML = `
+                <tr>
+                    <td class="empty-row" colspan="3">Unable to load categories.</td>
+                </tr>
+            `;
+        });
+    }
+
+    function saveCategory() {
+        const id = document.getElementById("categoryId").value;
+        const name = document.getElementById("categoryName").value.trim();
+
+        if (name === "") {
+            showMessage("Please enter category name", true);
+            return;
+        }
+
+        if (id === "") {
+            fetch(authUrl("/category"), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                showMessage("Category added successfully", false);
+                clearForm();
+                loadCategories();
+            });
+        } else {
+            fetch(authUrl("/category/" + id), {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                showMessage("Category updated successfully", false);
+                clearForm();
+                loadCategories();
+            });
+        }
+    }
+
+    function editCategory(id, name) {
+        document.getElementById("categoryId").value = id;
+        document.getElementById("categoryName").value = name;
+        showMessage("Editing category #" + id, false);
+    }
+
+    function deleteCategory(id) {
+        fetch(authUrl("/category/" + id), {
+            method: "DELETE"
+        })
+        .then(response => response.text())
+        .then(data => {
+            showMessage(data, false);
+            loadCategories();
+        });
+    }
+
+    function clearForm() {
+        document.getElementById("categoryId").value = "";
+        document.getElementById("categoryName").value = "";
+    }
+
+    checkLogin();
+    setUserFooter();
+    loadCategories();
+</script>
+
+</body>
+</html>
